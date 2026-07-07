@@ -35,31 +35,7 @@ internal static class PsxAnimationBoneMap
         PsxAnimationBoneRemap? remap,
         int targetBoneCount)
     {
-        if (remap == null || remap.IsIdentity)
-            return animation;
-
-        var channels = new short[targetBoneCount, PsxAnimation.ChannelsPerBone, animation.FrameCount];
-        var sourceLimit = Math.Min(animation.BoneCount, remap.SourceToTarget.Count);
-        for (var sourceBone = 0; sourceBone < sourceLimit; sourceBone++)
-        {
-            var targetBone = remap.SourceToTarget[sourceBone];
-            if (targetBone < 0 || targetBone >= targetBoneCount)
-                continue;
-
-            for (var channel = 0; channel < PsxAnimation.ChannelsPerBone; channel++)
-            {
-                for (var frame = 0; frame < animation.FrameCount; frame++)
-                    channels[targetBone, channel, frame] = animation.Channels[sourceBone, channel, frame];
-            }
-        }
-
-        return new PsxAnimation
-        {
-            FrameCount = animation.FrameCount,
-            BoneCount = targetBoneCount,
-            Channels = channels,
-            RotationUnitsPerRevolution = animation.RotationUnitsPerRevolution
-        };
+        return animation;
     }
 
     internal static PshFile? TryReadPsh(AssetSource source)
